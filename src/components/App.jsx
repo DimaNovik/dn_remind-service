@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { addReminder } from "../actions/index";
+import { addReminder, deleteReminder } from "../actions/index";
 
 class App extends Component {
 	constructor(props) {
@@ -14,6 +14,10 @@ class App extends Component {
 		this.props.addReminder(this.state.text);
 	}
 
+	deleteReminder(id) {
+		console.log('deleting reminder in app', id);
+	}
+
 	renderReminder() {
 		const { reminders } = this.props;
 		return (
@@ -24,7 +28,14 @@ class App extends Component {
 							<li
 								key={reminder.id}
 							>
-								{reminder.text}
+								<div className="list-item">{reminder.text}</div>
+								<div
+									className="list-item delete-button"
+									onClick={()=>this.deleteReminder(reminder.id)}
+								>
+									&#x2715;
+								</div>
+
 							</li>
 						)
 					})
@@ -35,29 +46,31 @@ class App extends Component {
 
 	render() {
 		return (
-			<div className="App">
-				<div className="App__title">
-					Reminder Service. Beta
-				</div>
-				<div className="App__form">
-					<div className="App__form-input">
-						<input
-							type="text"
-							placeholder="I have to ..."
-							onChange={event=> this.setState({text:event.target.value})}
-						/>
+			<div className="container">
+				<div className="App__area">
+					<div className="App__title">
+						Reminder Service. Beta
 					</div>
-					<div className="App__form-btn">
-						<button
-							type="button"
-							className="App__form-btn--success"
-							onClick={() => this.addReminder()}
-						>
-							Add Events
-						</button>
-					</div>
-					<div className="App_show-list-area">
-						{ this.renderReminder() }
+					<div className="App__form">
+						<div className="App__form-input">
+							<input
+								type="text"
+								placeholder="I have to ..."
+								onChange={event=> this.setState({text:event.target.value})}
+							/>
+						</div>
+						<div className="App__form-btn">
+							<button
+								type="button"
+								className="App__form-btn--success"
+								onClick={() => this.addReminder()}
+							>
+								Add Events
+							</button>
+						</div>
+						<div className="App_show-list-area">
+							{ this.renderReminder() }
+						</div>
 					</div>
 				</div>
 			</div>
@@ -71,4 +84,4 @@ function mapStateToProps(state) {
 	}
 }
 
-export default connect(mapStateToProps, { addReminder })(App);
+export default connect(mapStateToProps, { addReminder, deleteReminder })(App);
